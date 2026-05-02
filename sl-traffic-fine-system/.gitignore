@@ -27,3 +27,6 @@ build/
 *.iml
 .vscode/
 .DS_Store
+
+**/firebase*.json
+**/traffic-fine-system-*-firebase*.json
