@@ -72,7 +72,7 @@ export default function OfficersPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-sky-700">Access control</p>
+          <p className="text-sm font-semibold text-blue-900">Access control</p>
           <h1 className="mt-1 text-3xl font-black text-slate-950">Officers</h1>
         </div>
         <button

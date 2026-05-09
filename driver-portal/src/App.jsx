@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage'
 import PaymentPage from './pages/PaymentPage'
 import ConfirmationPage from './pages/ConfirmationPage'
 import { getApiBaseUrl } from './api/fineApi'
+import logoUrl from '../../Logo.png'
 
 const LANGS = [
   { code: 'en', label: 'English' },
@@ -16,15 +17,19 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-100 text-slate-900">
-      <header className="border-b border-blue-950 bg-blue-950 text-white shadow-sm">
+      <header className="border-b border-blue-900 bg-blue-950 text-white shadow-sm">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-200">{t('subtitle')}</p>
-            <h1 className="text-2xl font-bold">{t('title')}</h1>
-            <p className="mt-1 text-xs text-blue-100">
-              {t('apiBase')}: {getApiBaseUrl()}
-            </p>
+          <div className="flex min-w-0 items-center gap-3">
+            <img src={logoUrl} alt="Sri Lanka Traffic Police" className="brand-logo" />
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">{t('subtitle')}</p>
+              <h1 className="text-2xl font-bold">{t('title')}</h1>
+              <p className="mt-1 truncate text-xs text-blue-100">
+                {t('apiBase')}: {getApiBaseUrl()}
+              </p>
+            </div>
           </div>
+
           <div className="flex flex-wrap gap-2" aria-label="Language selector">
             {LANGS.map((lang) => (
               <button

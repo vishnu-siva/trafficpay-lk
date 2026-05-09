@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { jsPDF } from 'jspdf'
@@ -67,7 +67,7 @@ export default function ConfirmationPage() {
     <div>
       <StepIndicator current={3} />
 
-      <section className="mt-8 rounded-lg bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 sm:p-8">
+      <section className="surface mt-8 rounded-lg p-6 text-center sm:p-8">
         {demoNotice && (
           <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm font-medium text-amber-800">
             {demoNotice}
@@ -91,14 +91,14 @@ export default function ConfirmationPage() {
           <button
             type="button"
             onClick={downloadReceipt}
-            className="rounded-md bg-blue-950 px-4 py-3 font-semibold text-white transition hover:bg-blue-900"
+            className="btn-primary"
           >
             {t('downloadReceipt')}
           </button>
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="rounded-md border border-slate-300 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="btn-secondary"
           >
             {t('payAnother')}
           </button>
@@ -118,3 +118,4 @@ function ReceiptRow({ label, value, mono = false, highlight = false }) {
     </div>
   )
 }
+

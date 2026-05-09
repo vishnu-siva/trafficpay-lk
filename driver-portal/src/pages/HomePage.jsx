@@ -96,7 +96,7 @@ export default function HomePage() {
     <div>
       <StepIndicator current={1} />
 
-      <section className="mt-8 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <section className="surface mt-8 rounded-lg p-6">
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-slate-950">{t('step1')}</h2>
           <p className="mt-1 text-sm text-slate-500">{t('lookupHelp')}</p>
@@ -114,7 +114,7 @@ export default function HomePage() {
               onChange={(event) => setRef(event.target.value.toUpperCase())}
               placeholder="TF-2026-000123"
               required
-              className="w-full rounded-md border border-slate-300 px-4 py-3 font-mono text-sm uppercase outline-none transition focus:border-blue-800 focus:ring-2 focus:ring-blue-100"
+              className="field font-mono uppercase"
             />
           </div>
 
@@ -128,7 +128,7 @@ export default function HomePage() {
                 value={cat}
                 onChange={(event) => setCat(event.target.value)}
                 required
-                className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-800 focus:ring-2 focus:ring-blue-100"
+                className="field"
               >
                 <option value="">{categoryLoading ? t('loading') : t('categoryPlaceholder')}</option>
                 {categories.map((category) => (
@@ -145,7 +145,7 @@ export default function HomePage() {
                 onChange={(event) => setCat(event.target.value.toUpperCase())}
                 placeholder={categoryLoading ? t('loading') : 'CAT-001'}
                 required
-                className="w-full rounded-md border border-slate-300 px-4 py-3 font-mono text-sm uppercase outline-none transition focus:border-blue-800 focus:ring-2 focus:ring-blue-100"
+                className="field font-mono uppercase"
               />
             )}
           </div>
@@ -159,7 +159,7 @@ export default function HomePage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-blue-950 px-4 py-3 font-semibold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn-primary w-full"
           >
             {loading ? t('loading') : t('lookupBtn')}
           </button>

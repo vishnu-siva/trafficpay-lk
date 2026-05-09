@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { login } from '../api/adminApi'
+import logoUrl from '../../../Logo.png'
 
 export default function LoginPage() {
   const [badge, setBadge] = useState('')
@@ -42,26 +43,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="grid min-h-screen bg-slate-950 lg:grid-cols-[minmax(0,1fr)_520px]">
+    <div className="grid min-h-screen bg-blue-950 lg:grid-cols-[minmax(0,1fr)_520px]">
       <section className="relative hidden overflow-hidden lg:block">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(14,165,233,0.28),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_52%,#075985_100%)]" />
+        <div className="absolute inset-0 bg-blue-950" />
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
           <div className="flex items-center gap-3">
-            <div className="grid h-12 w-12 place-items-center rounded-lg bg-sky-400 font-black text-slate-950">TP</div>
+            <img src={logoUrl} alt="Sri Lanka Traffic Police" className="brand-logo" />
             <div>
               <p className="text-lg font-bold">TrafficPay LK</p>
-              <p className="text-sm text-slate-300">Admin Portal</p>
+              <p className="text-sm text-blue-100">Admin Portal</p>
             </div>
           </div>
 
           <div className="max-w-xl">
-            <p className="mb-4 text-sm font-semibold uppercase text-sky-200">Sri Lanka traffic fines</p>
+            <p className="mb-4 text-sm font-semibold uppercase text-amber-200">Sri Lanka traffic fines</p>
             <h1 className="text-5xl font-black leading-tight">Operational control for fines, collections, and officers.</h1>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             {['District reports', 'Fine actions', 'Officer access'].map(item => (
-              <div key={item} className="rounded-lg border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold backdrop-blur">
+              <div key={item} className="rounded-md border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold">
                 {item}
               </div>
             ))}
@@ -72,8 +73,8 @@ export default function LoginPage() {
       <section className="flex items-center justify-center p-4 sm:p-8">
         <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-2xl sm:p-8">
           <div className="mb-8">
-            <div className="mb-4 grid h-12 w-12 place-items-center rounded-lg bg-sky-100 font-black text-sky-800 lg:hidden">TP</div>
-            <p className="text-sm font-semibold uppercase text-sky-700">Admin Portal</p>
+            <img src={logoUrl} alt="Sri Lanka Traffic Police" className="brand-logo mb-4 lg:hidden" />
+            <p className="text-sm font-semibold uppercase text-blue-900">Admin Portal</p>
             <h1 className="mt-2 text-3xl font-black text-slate-950">Sign in</h1>
             <p className="mt-2 text-sm text-slate-500">Sri Lanka Police Traffic Fine System</p>
           </div>

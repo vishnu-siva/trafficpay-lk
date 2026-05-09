@@ -11,8 +11,9 @@ admin-portal/dist/
 driver-portal/dist/
 backend/target/
 
-# Environment & Cache
+# Environment & cache
 .env
 admin-portal/.env
+admin-portal/.npm-cache/
 driver-portal/.npm-cache/
 .DS_Store
