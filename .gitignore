@@ -9,6 +9,7 @@ driver-portal/node_modules/
 dist/
 admin-portal/dist/
 driver-portal/dist/
+backend/target/
 
 # Environment & Cache
 .env
