@@ -1,0 +1,407 @@
+{
+  "info": {
+    "_postman_id": "trafficpay-backend-collection",
+    "name": "TrafficPay Backend API",
+    "description": "Collection for testing TrafficPay Backend REST APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"badgeNumber\": \"ADMIN001\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login with admin credentials to get JWT token"
+          },
+          "response": []
+        },
+        {
+          "name": "Officer Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"badgeNumber\": \"OFF001\",\n  \"password\": \"off123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Public Endpoints",
+      "item": [
+        {
+          "name": "Get Fine Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "Get list of all traffic fine categories"
+          },
+          "response": []
+        },
+        {
+          "name": "Lookup Fine",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/fines/lookup?referenceNumber=FR001&categoryId=CAT001",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "lookup"
+              ],
+              "query": [
+                {
+                  "key": "referenceNumber",
+                  "value": "FR001"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "CAT001"
+                }
+              ]
+            },
+            "description": "Look up a fine by reference number and category ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Initiate Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fineId\": \"fine_doc_id_here\",\n  \"paymentMethod\": \"CARD\",\n  \"amount\": 5000.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/initiate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payments",
+                "initiate"
+              ]
+            },
+            "description": "Initiate a payment for a fine"
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentId\": \"PAY001\",\n  \"transactionId\": \"TXN123456\",\n  \"status\": \"SUCCESS\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/confirm",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "payments",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Endpoints",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard"
+              ]
+            },
+            "description": "Get dashboard summary with statistics (ADMIN only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Officers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/officers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "officers"
+              ]
+            },
+            "description": "Get list of all traffic officers (ADMIN only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Officer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"badgeNumber\": \"OFF002\",\n  \"fullName\": \"Silva Jayasinghe\",\n  \"password\": \"temporary123\",\n  \"district\": \"Kandy\",\n  \"station\": \"Kandy Central\",\n  \"phoneNumber\": \"+94772345678\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/officers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "officers"
+              ]
+            },
+            "description": "Create a new traffic officer (ADMIN only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Fines",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/fines",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "fines"
+              ]
+            },
+            "description": "Get all fines with statistics (ADMIN only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Fine",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Duplicate entry\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/fines/fine_id_here/cancel",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "fines",
+                "fine_id_here",
+                "cancel"
+              ]
+            },
+            "description": "Cancel a fine (ADMIN only)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Officer Endpoints",
+      "item": [
+        {
+          "name": "Issue Fine",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": \"CAT001\",\n  \"vehicleNumber\": \"ABC-1234\",\n  \"driverName\": \"John Doe\",\n  \"district\": \"Colombo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/fines/issue",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "issue"
+              ]
+            },
+            "description": "Issue a new traffic fine (OFFICER)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Issued Fines",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/fines/my-fines",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "fines",
+                "my-fines"
+              ]
+            },
+            "description": "Get fines issued by current officer"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

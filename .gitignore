@@ -1,0 +1,19 @@
+backend/src/main/resources/firebase-service-account.json
+
+# Dependencies
+node_modules/
+admin-portal/node_modules/
+driver-portal/node_modules/
+
+# Build outputs
+dist/
+admin-portal/dist/
+driver-portal/dist/
+backend/target/
+
+# Environment & cache
+.env
+admin-portal/.env
+admin-portal/.npm-cache/
+driver-portal/.npm-cache/
+.DS_Store
