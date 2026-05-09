@@ -12,9 +12,9 @@ export default function Layout() {
   }
 
   const navItems = [
-    { to: '/dashboard', label: 'Dashboard', icon: 'D' },
-    { to: '/fines', label: 'Fines', icon: 'F' },
-    { to: '/officers', label: 'Officers', icon: 'O' },
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/fines', label: 'Fines' },
+    { to: '/officers', label: 'Officers' },
   ]
 
   return (
@@ -38,7 +38,6 @@ export default function Layout() {
                 }`
               }
             >
-              <span className="grid h-7 w-7 place-items-center rounded-md bg-current/10 text-xs">{item.icon}</span>
               <span>{item.label}</span>
             </NavLink>
           ))}
