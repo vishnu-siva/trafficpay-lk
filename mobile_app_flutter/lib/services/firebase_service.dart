@@ -108,11 +108,10 @@ class FirebaseService {
             .toList());
   }
 
-  Future<FineResponse> lookupFine(String referenceNumber, String categoryId) async {
+  Future<FineResponse> lookupFine(String referenceNumber) async {
     final snap = await _db
         .collection('fines')
-        .where('referenceNumber', isEqualTo: referenceNumber.trim())
-        .where('categoryId', isEqualTo: categoryId.trim())
+        .where('referenceNumber', isEqualTo: referenceNumber.trim().toUpperCase())
         .limit(1)
         .get();
     if (snap.docs.isEmpty) throw Exception('Fine not found');

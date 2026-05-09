@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
-import 'pay_fine_screen.dart';
+import 'driver_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -60,7 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 48),
-              const Icon(Icons.local_police, size: 80, color: Colors.blue),
+              Image.asset('assets/Logo.png', width: 90, height: 90,
+                  errorBuilder: (ctx, err, stack) => const Icon(Icons.local_police, size: 90, color: Color(0xFF172554))),
               const SizedBox(height: 16),
               const Text('SL Traffic Police',
                   textAlign: TextAlign.center,
@@ -103,12 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: _login,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
                       ),
-                      child: const Text('Login', style: TextStyle(fontSize: 16)),
+                      child: const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
               const SizedBox(height: 24),
               const Row(children: [
@@ -124,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const PayFineScreen())),
+                    MaterialPageRoute(builder: (_) => const DriverLoginScreen())),
                 icon: const Icon(Icons.payment),
                 label: const Text('Pay a Traffic Fine',
                     style: TextStyle(fontSize: 15)),

@@ -29,14 +29,10 @@ export default function LoginPage() {
       }
 
       const { data } = await login(badge.trim(), password)
-      if (data.user?.role !== 'ADMIN') {
-        setError('Access denied. Admin accounts only.')
-        return
-      }
       loginUser(data.token, data.user)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials or backend is not reachable.')
+      setError(err.response?.data?.message || err.message || 'Invalid badge number or password.')
     } finally {
       setLoading(false)
     }

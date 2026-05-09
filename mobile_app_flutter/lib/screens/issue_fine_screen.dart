@@ -125,9 +125,12 @@ class _IssueFineScreenState extends State<IssueFineScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Issue Traffic Fine'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        title: Row(children: [
+          Image.asset('assets/Logo.png', height: 30,
+              errorBuilder: (ctx, err, stack) => const Icon(Icons.local_police, color: Colors.white, size: 30)),
+          const SizedBox(width: 8),
+          const Text('Issue Traffic Fine'),
+        ]),
         actions: [
           IconButton(
             icon: const Icon(Icons.list_alt),
@@ -263,12 +266,10 @@ class _IssueFineScreenState extends State<IssueFineScreen> {
                         onPressed: _submitFine,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                         ),
-                        child: const Text('Issue Fine', style: TextStyle(fontSize: 16)),
+                        child: const Text('Issue Fine', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
 
                 if (_issuedFine != null) ...[

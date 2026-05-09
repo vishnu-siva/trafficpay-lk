@@ -28,6 +28,30 @@ class OfficerProfile {
   );
 }
 
+class DriverProfile {
+  final String uid;
+  final String fullName;
+  final String nicNumber;
+  final String email;
+  final String? phoneNumber;
+
+  DriverProfile({
+    required this.uid,
+    required this.fullName,
+    required this.nicNumber,
+    required this.email,
+    this.phoneNumber,
+  });
+
+  factory DriverProfile.fromDoc(String uid, Map<String, dynamic> data) => DriverProfile(
+    uid: uid,
+    fullName: data['fullName'] ?? '',
+    nicNumber: data['nicNumber'] ?? '',
+    email: data['email'] ?? '',
+    phoneNumber: data['phoneNumber'],
+  );
+}
+
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -69,6 +93,58 @@ class AuthService {
     final doc = await _db.collection('officers').doc(user.uid).get();
     if (!doc.exists) return null;
     return OfficerProfile.fromDoc(user.uid, doc.data()!);
+  }
+
+  // ── Driver Auth ───────────────────────────────────────────────────────────
+
+  Future<DriverProfile> registerDriver({
+    required String fullName,
+    required String nicNumber,
+    required String email,
+    required String password,
+    String? phoneNumber,
+  }) async {
+    final cred = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    final data = {
+      'fullName': fullName,
+      'nicNumber': nicNumber,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'role': 'DRIVER',
+      'createdAt': FieldValue.serverTimestamp(),
+    };
+    await _db.collection('drivers').doc(cred.user!.uid).set(data);
+    return DriverProfile.fromDoc(cred.user!.uid, data);
+  }
+
+  Future<DriverProfile> signInDriver(String email, String password) async {
+    final cred = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+    final doc = await _db.collection('drivers').doc(cred.user!.uid).get();
+    if (!doc.exists) {
+      await _auth.signOut();
+      throw Exception('This account is not registered as a driver.');
+    }
+    return DriverProfile.fromDoc(cred.user!.uid, doc.data()!);
+  }
+
+  Future<DriverProfile?> getCurrentDriverProfile() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    final doc = await _db.collection('drivers').doc(user.uid).get();
+    if (!doc.exists) return null;
+    return DriverProfile.fromDoc(user.uid, doc.data()!);
+  }
+
+  Future<String?> getUserRole() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    final officerDoc = await _db.collection('officers').doc(user.uid).get();
+    if (officerDoc.exists) return 'OFFICER';
+    final driverDoc = await _db.collection('drivers').doc(user.uid).get();
+    if (driverDoc.exists) return 'DRIVER';
+    return null;
   }
 
   Future<void> signOut() => _auth.signOut();

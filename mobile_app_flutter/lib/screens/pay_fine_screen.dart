@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/api_models.dart';
+import '../services/auth_service.dart';
 import '../services/firebase_service.dart';
 import 'payment_success_screen.dart';
 
@@ -11,29 +12,54 @@ class PayFineScreen extends StatefulWidget {
 
 class _PayFineScreenState extends State<PayFineScreen> {
   final _firebaseService = FirebaseService();
+  final _authService = AuthService();
   final _refCtrl = TextEditingController();
-  final _catCtrl = TextEditingController();
   final _nameCtrl = TextEditingController();
   final _nicCtrl = TextEditingController();
 
   FineResponse? _fine;
+  List<FineCategory> _categories = [];
+  FineCategory? _selectedCategory;
   bool _lookingUp = false;
   bool _paying = false;
   String _paymentMethod = 'CASH';
   final _paymentMethods = ['CASH', 'CARD', 'ONLINE_TRANSFER'];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadDriverProfile();
+    _loadCategories();
+  }
+
+  Future<void> _loadDriverProfile() async {
+    final profile = await _authService.getCurrentDriverProfile();
+    if (profile != null && mounted) {
+      setState(() {
+        _nameCtrl.text = profile.fullName;
+        _nicCtrl.text = profile.nicNumber;
+      });
+    }
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      final cats = await _firebaseService.getCategories();
+      if (mounted) setState(() => _categories = cats);
+    } catch (_) {}
+  }
+
   Future<void> _lookupFine() async {
-    if (_refCtrl.text.trim().isEmpty || _catCtrl.text.trim().isEmpty) {
-      _showMsg('Enter both reference number and category ID');
+    if (_refCtrl.text.trim().isEmpty) {
+      _showMsg('Enter the fine reference number');
       return;
     }
     setState(() { _lookingUp = true; _fine = null; });
     try {
-      final fine = await _firebaseService.lookupFine(
-          _refCtrl.text.trim(), _catCtrl.text.trim());
+      final fine = await _firebaseService.lookupFine(_refCtrl.text.trim());
       setState(() => _fine = fine);
     } catch (_) {
-      _showMsg('Fine not found. Check reference number and category ID.');
+      _showMsg('Fine not found. Check the reference number.');
     } finally {
       if (mounted) setState(() => _lookingUp = false);
     }
@@ -57,7 +83,7 @@ class _PayFineScreenState extends State<PayFineScreen> {
         paidByNic: _nicCtrl.text.trim(),
       );
       if (mounted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(
+        Navigator.push(context, MaterialPageRoute(
           builder: (_) => PaymentSuccessScreen(
               payment: payment, fineRef: _fine!.referenceNumber),
         ));
@@ -77,9 +103,19 @@ class _PayFineScreenState extends State<PayFineScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        title: const Text('Pay Traffic Fine'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        title: Row(children: [
+          Image.asset('assets/Logo.png', height: 30,
+              errorBuilder: (ctx, err, stack) => const Icon(Icons.local_police, color: Colors.white, size: 30)),
+          const SizedBox(width: 8),
+          const Text('Pay Traffic Fine'),
+        ]),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () => _authService.signOut(),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -105,14 +141,32 @@ class _PayFineScreenState extends State<PayFineScreen> {
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.numbers)),
                 ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _catCtrl,
-                  decoration: const InputDecoration(
-                      labelText: 'Category ID (from fine sheet)',
+                if (_categories.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  InputDecorator(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.category_outlined)),
-                ),
+                      prefixIcon: Icon(Icons.category_outlined),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    ),
+                    child: DropdownButton<FineCategory>(
+                      value: _selectedCategory,
+                      hint: const Text('Fine Category (optional)'),
+                      isExpanded: true,
+                      underline: const SizedBox.shrink(),
+                      items: _categories
+                          .map((c) => DropdownMenuItem(
+                                value: c,
+                                child: Text(
+                                  '${c.description} (${c.code})',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (v) => setState(() => _selectedCategory = v),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 16),
                 _lookingUp
                     ? const Center(child: CircularProgressIndicator())
@@ -251,7 +305,6 @@ class _PayFineScreenState extends State<PayFineScreen> {
   @override
   void dispose() {
     _refCtrl.dispose();
-    _catCtrl.dispose();
     _nameCtrl.dispose();
     _nicCtrl.dispose();
     super.dispose();

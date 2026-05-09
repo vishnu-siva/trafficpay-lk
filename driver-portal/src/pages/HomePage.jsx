@@ -63,7 +63,7 @@ export default function HomePage() {
 
     try {
       if (isDemoPaid(referenceNumber)) {
-        setError(t('alreadyPaid'))
+        setError('alreadyPaid')
         return
       }
 
@@ -73,9 +73,9 @@ export default function HomePage() {
       const status = err.response?.status
       const code = err.response?.data?.error || err.response?.data?.code
       if (status === 409 || code === 'ALREADY_PAID') {
-        setError(t('alreadyPaid'))
+        setError('alreadyPaid')
       } else if (status === 404 || code === 'NOT_FOUND') {
-        setError(t('notFound'))
+        setError('notFound')
       } else if (!err.response) {
         navigate('/pay', {
           state: {
@@ -85,7 +85,7 @@ export default function HomePage() {
           },
         })
       } else {
-        setError(t('genericError'))
+        setError('genericError')
       }
     } finally {
       setLoading(false)
@@ -152,7 +152,7 @@ export default function HomePage() {
 
           {error && (
             <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-              {error}
+              {t(error)}
             </div>
           )}
 

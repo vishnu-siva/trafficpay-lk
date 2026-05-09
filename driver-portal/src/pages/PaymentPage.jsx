@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { confirmPayment, initiatePayment } from '../api/fineApi'
 import { makeDemoReceipt, markDemoPaid } from '../api/demoData'
+import { useDriverAuth } from '../context/DriverAuthContext'
 import StepIndicator from '../components/StepIndicator'
 import {
   formatMoney,
@@ -21,17 +22,26 @@ export default function PaymentPage() {
   const fine = state?.fine
   const demoNotice = state?.demoNotice
 
-  const [name, setName] = useState('')
-  const [nic, setNic] = useState('')
+  const { profile } = useDriverAuth()
+  const [name, setName] = useState(profile?.fullName ?? '')
+  const [nic, setNic] = useState(profile?.nicNumber ?? '')
   const [method, setMethod] = useState('CARD')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!fine) {
-      navigate('/', { replace: true })
-    }
+    if (!fine) navigate('/', { replace: true })
   }, [fine, navigate])
+
+  useEffect(() => {
+    if (profile) {
+      setName(profile.fullName)
+      setNic(profile.nicNumber)
+    } else {
+      setName('')
+      setNic('')
+    }
+  }, [profile])
 
   if (!fine) {
     return null
@@ -87,7 +97,7 @@ export default function PaymentPage() {
       const status = err.response?.status
       const code = err.response?.data?.error || err.response?.data?.code
       if (status === 409 || code === 'ALREADY_PAID') {
-        setError(t('alreadyPaid'))
+        setError('alreadyPaid')
       } else if (!err.response) {
         const payer = { name: name.trim(), nic: nic.trim(), method }
         const receipt = makeDemoReceipt(fine, payer)
@@ -101,7 +111,7 @@ export default function PaymentPage() {
           },
         })
       } else {
-        setError(t('paymentFailed'))
+        setError('paymentFailed')
       }
     } finally {
       setLoading(false)
@@ -183,7 +193,7 @@ export default function PaymentPage() {
 
           {error && (
             <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-              {error}
+              {t(error)}
             </div>
           )}
 
