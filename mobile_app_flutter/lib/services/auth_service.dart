@@ -1,0 +1,77 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class OfficerProfile {
+  final String uid;
+  final String badgeNumber;
+  final String fullName;
+  final String role;
+  final String district;
+  final String? phoneNumber;
+
+  OfficerProfile({
+    required this.uid,
+    required this.badgeNumber,
+    required this.fullName,
+    required this.role,
+    required this.district,
+    this.phoneNumber,
+  });
+
+  factory OfficerProfile.fromDoc(String uid, Map<String, dynamic> data) => OfficerProfile(
+    uid: uid,
+    badgeNumber: data['badgeNumber'] ?? '',
+    fullName: data['fullName'] ?? '',
+    role: data['role'] ?? 'OFFICER',
+    district: data['district'] ?? '',
+    phoneNumber: data['phoneNumber'],
+  );
+}
+
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  User? get currentUser => _auth.currentUser;
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  // Officers login with badge number — stored as badge@slpolice.lk in Firebase Auth
+  String _emailFromBadge(String badge) => '${badge.toLowerCase()}@slpolice.lk';
+
+  Future<OfficerProfile> signIn(String badgeNumber, String password) async {
+    final email = _emailFromBadge(badgeNumber.trim());
+    final cred = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    return _getOrCreateProfile(cred.user!, badgeNumber.trim());
+  }
+
+  Future<OfficerProfile> _getOrCreateProfile(User user, String badgeNumber) async {
+    final doc = await _db.collection('officers').doc(user.uid).get();
+    if (doc.exists) {
+      return OfficerProfile.fromDoc(user.uid, doc.data()!);
+    }
+    // First login — create profile
+    final profile = {
+      'badgeNumber': badgeNumber,
+      'fullName': user.displayName ?? 'Officer $badgeNumber',
+      'role': 'OFFICER',
+      'district': 'Colombo',
+      'phoneNumber': user.phoneNumber,
+      'email': user.email,
+      'createdAt': FieldValue.serverTimestamp(),
+    };
+    await _db.collection('officers').doc(user.uid).set(profile);
+    return OfficerProfile.fromDoc(user.uid, profile);
+  }
+
+  Future<OfficerProfile?> getCurrentProfile() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    final doc = await _db.collection('officers').doc(user.uid).get();
+    if (!doc.exists) return null;
+    return OfficerProfile.fromDoc(user.uid, doc.data()!);
+  }
+
+  Future<void> signOut() => _auth.signOut();
+
+  bool get isLoggedIn => _auth.currentUser != null;
+}

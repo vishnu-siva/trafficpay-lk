@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855087722830",
+    "project_id": "trafficpay-lk",
+    "storage_bucket": "trafficpay-lk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855087722830:android:a05367dde99f570b3b6e1f",
+        "android_client_info": {
+          "package_name": "com.slpolice.trafficpay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB71UVlwI9qeFa_w0W2dG9McUfe_XUCVqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
