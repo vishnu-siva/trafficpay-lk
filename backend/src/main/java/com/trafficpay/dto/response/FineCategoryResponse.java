@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 public class FineCategoryResponse {
-    private Long id;
+    private String id;
     private String code;
     private String description;
     private BigDecimal amount;
