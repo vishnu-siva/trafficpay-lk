@@ -5,7 +5,7 @@ import {
 } from 'recharts'
 import { getSummary, getByDistrict, getByCategory } from '../api/adminApi'
 
-const COLORS = ['#0369a1', '#16a34a', '#f59e0b', '#dc2626', '#7c3aed', '#0891b2', '#be123c', '#475569']
+const COLORS = ['#172554', '#0f766e', '#d97706', '#be123c', '#475569', '#047857', '#1d4ed8', '#7c2d12']
 
 const number = value => Number(value || 0).toLocaleString()
 const money = value => `LKR ${number(value)}`
@@ -22,7 +22,7 @@ const rateTotal = row => Number(row.collectionRate ?? 0)
 
 function KpiCard({ title, value, sub, tone }) {
   const tones = {
-    sky: 'bg-sky-50 text-sky-800 border-sky-100',
+    sky: 'bg-blue-50 text-blue-900 border-blue-100',
     green: 'bg-emerald-50 text-emerald-800 border-emerald-100',
     amber: 'bg-amber-50 text-amber-800 border-amber-100',
     slate: 'bg-slate-50 text-slate-800 border-slate-100',
@@ -107,7 +107,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <p className="text-sm font-semibold text-sky-700">Overview</p>
+          <p className="text-sm font-semibold text-blue-900">Overview</p>
           <h1 className="mt-1 text-3xl font-black text-slate-950">Dashboard</h1>
         </div>
         <div className="surface flex flex-wrap items-center gap-3 rounded-lg p-3">
@@ -164,7 +164,7 @@ export default function DashboardPage() {
                     <Tooltip formatter={(v, n) => [n === 'totalRevenue' ? money(v) : number(v), n]} />
                     <Legend />
                     <Bar dataKey="totalIssued" name="Issued" fill="#94a3b8" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="totalPaid" name="Paid" fill="#0369a1" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="totalPaid" name="Paid" fill="#172554" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
@@ -221,7 +221,7 @@ export default function DashboardPage() {
                       <td className="px-4 py-3">
                         <div className="flex min-w-36 items-center gap-2">
                           <div className="h-2 flex-1 rounded-full bg-slate-200">
-                            <div className="h-2 rounded-full bg-sky-700" style={{ width: `${Math.min(rateTotal(d), 100)}%` }} />
+                            <div className="h-2 rounded-full bg-blue-950" style={{ width: `${Math.min(rateTotal(d), 100)}%` }} />
                           </div>
                           <span className="w-10 text-right text-xs font-semibold text-slate-600">{rateTotal(d)}%</span>
                         </div>

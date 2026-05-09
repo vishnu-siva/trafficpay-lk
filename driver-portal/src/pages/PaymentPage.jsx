@@ -112,7 +112,7 @@ export default function PaymentPage() {
     <div>
       <StepIndicator current={2} />
 
-      <section className="mt-8 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <section className="surface mt-8 rounded-lg p-6">
         {demoNotice && (
           <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
             {demoNotice}
@@ -129,7 +129,7 @@ export default function PaymentPage() {
         </dl>
       </section>
 
-      <section className="mt-4 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200">
+      <section className="surface mt-4 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-slate-950">{t('step2')}</h2>
 
         <form onSubmit={handlePayment} className="mt-5 space-y-5">
@@ -143,7 +143,7 @@ export default function PaymentPage() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               required
-              className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-800 focus:ring-2 focus:ring-blue-100"
+              className="field"
             />
           </div>
 
@@ -159,7 +159,7 @@ export default function PaymentPage() {
               required
               pattern="^([0-9]{9}[VX]|[0-9]{12})$"
               title="Use 123456789V or 200012345678 format"
-              className="w-full rounded-md border border-slate-300 px-4 py-3 font-mono text-sm uppercase outline-none transition focus:border-blue-800 focus:ring-2 focus:ring-blue-100"
+              className="field font-mono uppercase"
             />
           </div>
 
@@ -171,7 +171,7 @@ export default function PaymentPage() {
               id="payment-method"
               value={method}
               onChange={(event) => setMethod(event.target.value)}
-              className="w-full rounded-md border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-800 focus:ring-2 focus:ring-blue-100"
+              className="field"
             >
               {methods.map((item) => (
                 <option key={item.value} value={item.value}>
@@ -191,14 +191,14 @@ export default function PaymentPage() {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="rounded-md border border-slate-300 px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50"
+              className="btn-secondary"
             >
               {t('back')}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-md bg-emerald-700 px-4 py-3 font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="btn-success"
             >
               {loading ? t('loading') : `${t('payBtn')} - ${formatMoney(amount)}`}
             </button>

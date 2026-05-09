@@ -63,7 +63,7 @@ export default function FinesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm font-semibold text-sky-700">Case operations</p>
+        <p className="text-sm font-semibold text-blue-900">Case operations</p>
         <h1 className="mt-1 text-3xl font-black text-slate-950">Fines</h1>
       </div>
 

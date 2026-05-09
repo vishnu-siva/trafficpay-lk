@@ -1,5 +1,6 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import logoUrl from '../../../Logo.png'
 
 export default function Layout() {
   const { user, logoutUser } = useAuth()
@@ -18,14 +19,12 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-slate-100 lg:flex">
-      <aside className="flex bg-slate-950 text-white lg:fixed lg:inset-y-0 lg:w-72 lg:flex-col">
-        <div className="flex min-w-0 flex-1 items-center gap-3 border-slate-800 px-4 py-4 lg:flex-none lg:border-b lg:px-6 lg:py-6">
-          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-sky-500 font-black text-slate-950">
-            TP
-          </div>
+      <aside className="flex bg-blue-950 text-white lg:fixed lg:inset-y-0 lg:w-72 lg:flex-col">
+        <div className="flex min-w-0 flex-1 items-center gap-3 border-blue-900 px-4 py-4 lg:flex-none lg:border-b lg:px-6 lg:py-6">
+          <img src={logoUrl} alt="Sri Lanka Traffic Police" className="brand-logo h-11 w-11" />
           <div className="min-w-0">
             <h1 className="truncate text-base font-bold">TrafficPay LK</h1>
-            <p className="text-xs font-medium text-slate-400">Admin Portal</p>
+            <p className="text-xs font-medium text-blue-100">Admin Portal</p>
           </div>
         </div>
         <nav className="flex gap-1 overflow-x-auto p-3 lg:flex-1 lg:flex-col lg:gap-2 lg:overflow-visible lg:p-4">
@@ -35,7 +34,7 @@ export default function Layout() {
               to={item.to}
               className={({ isActive }) =>
                 `flex min-h-10 shrink-0 items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition lg:px-4 ${
-                  isActive ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  isActive ? 'bg-white text-blue-950 shadow-sm' : 'text-blue-100 hover:bg-blue-900 hover:text-white'
                 }`
               }
             >
@@ -44,12 +43,12 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="hidden border-t border-slate-800 p-4 lg:block">
+        <div className="hidden border-t border-blue-900 p-4 lg:block">
           <p className="truncate text-sm font-semibold text-white">{user?.fullName || 'Admin'}</p>
-          <p className="mb-4 mt-1 text-xs text-slate-400">{user?.district || 'Sri Lanka'}</p>
+          <p className="mb-4 mt-1 text-xs text-blue-100">{user?.district || 'Sri Lanka'}</p>
           <button
             onClick={handleLogout}
-            className="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-800 hover:text-white"
+            className="w-full rounded-md border border-blue-800 px-3 py-2 text-sm font-semibold text-blue-100 transition hover:bg-blue-900 hover:text-white"
           >
             Logout
           </button>

@@ -2,3 +2,5 @@ sl-traffic-fine-system/backend/src/main/resources/traffic-fine-system-9ec98-fire
 driver-portal/node_modules/
 driver-portal/.npm-cache/
 driver-portal/dist/
+admin-portal/node_modules/
+admin-portal/.npm-cache/
