@@ -1,6 +1,18 @@
 sl-traffic-fine-system/backend/src/main/resources/traffic-fine-system-9ec98-firebase-adminsdk-fbsvc-59150399ff.json
-driver-portal/node_modules/
-driver-portal/.npm-cache/
-driver-portal/dist/
+
+# Dependencies
+node_modules/
 admin-portal/node_modules/
+driver-portal/node_modules/
+
+# Build outputs
+dist/
+admin-portal/dist/
+driver-portal/dist/
+
+# Environment & cache
+.env
+admin-portal/.env
 admin-portal/.npm-cache/
+driver-portal/.npm-cache/
+.DS_Store
