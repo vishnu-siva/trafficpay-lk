@@ -26,8 +26,8 @@ public class AuthService {
             throw new BadCredentialsException("Invalid badge number or password");
         }
 
-        String token = jwtTokenProvider.generateToken(user.getBadgeNumber(), user.getRole().name());
+        String token = jwtTokenProvider.generateToken(user.getBadgeNumber(), user.getRole());
         return new AuthResponse(token, user.getBadgeNumber(), user.getFullName(),
-                user.getRole().name(), user.getDistrict());
+                user.getRole(), user.getDistrict());
     }
 }
