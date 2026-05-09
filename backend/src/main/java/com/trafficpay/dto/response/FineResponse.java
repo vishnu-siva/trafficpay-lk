@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class FineResponse {
-    private Long id;
+    private String id;
     private String referenceNumber;
     private String categoryCode;
     private String categoryDescription;

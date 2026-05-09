@@ -10,8 +10,8 @@ import com.trafficpay.repository.FineRepository;
 import com.trafficpay.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -27,58 +27,56 @@ public class PaymentService {
         return fineService.lookupFine(request.getReferenceNumber(), request.getCategoryCode());
     }
 
-    @Transactional
     public PaymentResponse confirmPayment(ConfirmPaymentRequest request) {
         Fine fine = fineRepository.findByReferenceAndCategoryCode(
                 request.getReferenceNumber(), request.getCategoryCode())
                 .orElseThrow(() -> new RuntimeException("Fine not found"));
 
-        if (fine.getStatus() == Fine.Status.PAID) {
-            throw new IllegalStateException("ALREADY_PAID");
-        }
+        if ("PAID".equals(fine.getStatus())) throw new IllegalStateException("ALREADY_PAID");
 
         Payment payment = new Payment();
-        payment.setFine(fine);
-        payment.setAmount(fine.getCategory().getAmount());
+        payment.setFineId(fine.getId());
+        payment.setReferenceNumber(fine.getReferenceNumber());
+        payment.setAmount(fine.getAmount());
         payment.setPayerName(request.getPayerName());
         payment.setPayerPhone(request.getPayerPhone());
         payment.setPaymentMethod(request.getPaymentMethod());
         payment.setTransactionId("TXN-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+        payment.setVehicleNumber(fine.getVehicleNumber());
+        payment.setDriverName(fine.getDriverName());
+        payment.setCategoryDescription(fine.getCategoryDescription());
+        payment.setPaidAt(LocalDateTime.now());
 
         Payment saved = paymentRepository.save(payment);
 
-        fine.setStatus(Fine.Status.PAID);
+        fine.setStatus("PAID");
         fineRepository.save(fine);
 
-        smsService.notifyOfficer(
-                fine.getOfficer().getPhoneNumber(),
-                fine.getReferenceNumber(),
-                fine.getVehicleNumber(),
-                fine.getCategory().getAmount().toString()
-        );
+        smsService.notifyOfficer(fine.getOfficerPhone(), fine.getReferenceNumber(),
+                fine.getVehicleNumber(), fine.getAmount().toString());
 
         return toResponse(saved);
     }
 
-    public PaymentResponse getReceipt(Long paymentId) {
-        Payment payment = paymentRepository.findById(paymentId)
+    public PaymentResponse getReceipt(String paymentId) {
+        Payment p = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new RuntimeException("Payment not found"));
-        return toResponse(payment);
+        return toResponse(p);
     }
 
     public PaymentResponse toResponse(Payment p) {
         return PaymentResponse.builder()
                 .id(p.getId())
                 .transactionId(p.getTransactionId())
-                .referenceNumber(p.getFine().getReferenceNumber())
+                .referenceNumber(p.getReferenceNumber())
                 .amount(p.getAmount())
                 .payerName(p.getPayerName())
                 .payerPhone(p.getPayerPhone())
                 .paymentMethod(p.getPaymentMethod())
                 .paidAt(p.getPaidAt())
-                .vehicleNumber(p.getFine().getVehicleNumber())
-                .driverName(p.getFine().getDriverName())
-                .categoryDescription(p.getFine().getCategory().getDescription())
+                .vehicleNumber(p.getVehicleNumber())
+                .driverName(p.getDriverName())
+                .categoryDescription(p.getCategoryDescription())
                 .build();
     }
 }

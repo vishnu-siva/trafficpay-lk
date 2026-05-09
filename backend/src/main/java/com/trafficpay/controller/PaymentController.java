@@ -28,7 +28,7 @@ public class PaymentController {
     }
 
     @GetMapping("/{paymentId}/receipt")
-    public ResponseEntity<PaymentResponse> receipt(@PathVariable Long paymentId) {
+    public ResponseEntity<PaymentResponse> receipt(@PathVariable String paymentId) {
         return ResponseEntity.ok(paymentService.getReceipt(paymentId));
     }
 }

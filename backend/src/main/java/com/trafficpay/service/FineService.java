@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,12 +30,8 @@ public class FineService {
     public FineResponse lookupFine(String ref, String cat) {
         Fine fine = fineRepository.findByReferenceAndCategoryCode(ref, cat)
                 .orElseThrow(() -> new RuntimeException("Fine not found"));
-        if (fine.getStatus() == Fine.Status.PAID) {
-            throw new IllegalStateException("ALREADY_PAID");
-        }
-        if (fine.getStatus() == Fine.Status.CANCELLED) {
-            throw new IllegalStateException("Fine is cancelled");
-        }
+        if ("PAID".equals(fine.getStatus())) throw new IllegalStateException("ALREADY_PAID");
+        if ("CANCELLED".equals(fine.getStatus())) throw new IllegalStateException("Fine is cancelled");
         return toResponse(fine);
     }
 
@@ -46,24 +43,30 @@ public class FineService {
 
         Fine fine = new Fine();
         fine.setReferenceNumber(generateReference(officer.getDistrict()));
-        fine.setCategory(category);
-        fine.setOfficer(officer);
+        fine.setCategoryId(category.getId());
+        fine.setCategoryCode(category.getCode());
+        fine.setCategoryDescription(category.getDescription());
+        fine.setAmount(category.getAmount());
+        fine.setOfficerId(officer.getId());
+        fine.setOfficerBadge(officer.getBadgeNumber());
+        fine.setOfficerName(officer.getFullName());
+        fine.setOfficerPhone(officer.getPhoneNumber());
         fine.setDriverName(request.getDriverName());
         fine.setDriverNic(request.getDriverNic());
         fine.setVehicleNumber(request.getVehicleNumber().toUpperCase());
         fine.setDistrict(officer.getDistrict());
-        fine.setStatus(Fine.Status.PENDING);
+        fine.setStatus("PENDING");
+        fine.setIssuedAt(LocalDateTime.now());
 
         return toResponse(fineRepository.save(fine));
     }
 
-    public FineResponse cancelFine(Long fineId, CancelFineRequest request) {
+    public FineResponse cancelFine(String fineId, CancelFineRequest request) {
         Fine fine = fineRepository.findById(fineId)
                 .orElseThrow(() -> new RuntimeException("Fine not found"));
-        if (fine.getStatus() != Fine.Status.PENDING) {
+        if (!"PENDING".equals(fine.getStatus()))
             throw new IllegalStateException("Only PENDING fines can be cancelled");
-        }
-        fine.setStatus(Fine.Status.CANCELLED);
+        fine.setStatus("CANCELLED");
         fine.setCancelReason(request.getReason());
         return toResponse(fineRepository.save(fine));
     }
@@ -86,21 +89,21 @@ public class FineService {
         return prefix + "-" + date + "-" + String.format("%04d", count);
     }
 
-    public FineResponse toResponse(Fine fine) {
+    public FineResponse toResponse(Fine f) {
         return FineResponse.builder()
-                .id(fine.getId())
-                .referenceNumber(fine.getReferenceNumber())
-                .categoryCode(fine.getCategory().getCode())
-                .categoryDescription(fine.getCategory().getDescription())
-                .amount(fine.getCategory().getAmount())
-                .driverName(fine.getDriverName())
-                .driverNic(fine.getDriverNic())
-                .vehicleNumber(fine.getVehicleNumber())
-                .district(fine.getDistrict())
-                .officerName(fine.getOfficer().getFullName())
-                .officerBadge(fine.getOfficer().getBadgeNumber())
-                .status(fine.getStatus().name())
-                .issuedAt(fine.getIssuedAt())
+                .id(f.getId())
+                .referenceNumber(f.getReferenceNumber())
+                .categoryCode(f.getCategoryCode())
+                .categoryDescription(f.getCategoryDescription())
+                .amount(f.getAmount())
+                .driverName(f.getDriverName())
+                .driverNic(f.getDriverNic())
+                .vehicleNumber(f.getVehicleNumber())
+                .district(f.getDistrict())
+                .officerName(f.getOfficerName())
+                .officerBadge(f.getOfficerBadge())
+                .status(f.getStatus())
+                .issuedAt(f.getIssuedAt())
                 .build();
     }
 }

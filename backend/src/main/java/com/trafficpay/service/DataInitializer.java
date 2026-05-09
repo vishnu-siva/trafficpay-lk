@@ -37,7 +37,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setDistrict("Colombo");
             admin.setStation("HQ");
             admin.setPhoneNumber("+94771234567");
-            admin.setRole(User.Role.ADMIN);
+            admin.setRole("ADMIN");
             userRepository.save(admin);
             log.info("Admin created — badge: ADMIN001, password: admin123");
         }
@@ -52,7 +52,7 @@ public class DataInitializer implements CommandLineRunner {
             officer.setDistrict("Colombo");
             officer.setStation("Wellawatte");
             officer.setPhoneNumber("+94777654321");
-            officer.setRole(User.Role.OFFICER);
+            officer.setRole("OFFICER");
             userRepository.save(officer);
             log.info("Sample officer created — badge: OFF001, password: officer123");
         }

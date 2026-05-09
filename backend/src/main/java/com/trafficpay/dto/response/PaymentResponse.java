@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class PaymentResponse {
-    private Long id;
+    private String id;
     private String transactionId;
     private String referenceNumber;
     private BigDecimal amount;

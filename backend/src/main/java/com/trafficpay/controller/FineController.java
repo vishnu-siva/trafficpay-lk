@@ -34,7 +34,7 @@ public class FineController {
 
     @PatchMapping("/api/v1/fines/{id}/cancel")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<FineResponse> cancelFine(@PathVariable Long id,
+    public ResponseEntity<FineResponse> cancelFine(@PathVariable String id,
                                                     @Valid @RequestBody CancelFineRequest request) {
         return ResponseEntity.ok(fineService.cancelFine(id, request));
     }
