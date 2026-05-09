@@ -124,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
               OutlinedButton.icon(
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const DriverLoginScreen())),
-                icon: const Icon(Icons.payment),
+                icon: Image.asset('assets/Logo.png', width: 20, height: 20,
+                    errorBuilder: (ctx, err, stack) => const Icon(Icons.payment)),
                 label: const Text('Pay a Traffic Fine',
                     style: TextStyle(fontSize: 15)),
                 style: OutlinedButton.styleFrom(

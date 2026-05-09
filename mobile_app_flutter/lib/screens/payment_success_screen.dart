@@ -234,8 +234,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
           const SizedBox(height: 12),
 
           ElevatedButton(
-            onPressed: () =>
-                Navigator.of(context).popUntil((route) => route.isFirst),
+            onPressed: () => Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (route) => false),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(

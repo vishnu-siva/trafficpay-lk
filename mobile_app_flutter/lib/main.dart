@@ -51,7 +51,10 @@ class TrafficPayApp extends StatelessWidget {
           border: OutlineInputBorder(),
         ),
       ),
-      home: const _HomeRouter(),
+      initialRoute: '/',
+      routes: {
+        '/': (ctx) => const _HomeRouter(),
+      },
     );
   }
 }
