@@ -24,9 +24,6 @@ export default function App() {
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-wide text-amber-200">{t('subtitle')}</p>
               <h1 className="text-2xl font-bold">{t('title')}</h1>
-              <p className="mt-1 truncate text-xs text-blue-100">
-                {t('apiBase')}: {getApiBaseUrl()}
-              </p>
             </div>
           </div>
 

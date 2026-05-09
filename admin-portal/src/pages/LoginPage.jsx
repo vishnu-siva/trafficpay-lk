@@ -86,7 +86,7 @@ export default function LoginPage() {
               type="text"
               value={badge}
               onChange={e => setBadge(e.target.value)}
-              placeholder="admin"
+              placeholder="Enter Badge Number"
               required
               className="field"
             />
@@ -97,6 +97,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              placeholder="Enter Password"
               required
               className="field"
             />
