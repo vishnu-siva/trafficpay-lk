@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(Get-ChildItem -Path \"f:\\\\GitHub\\\\software architecture\\\\trafficpay-lk\\\\mobile-app\\\\\" -Recurse -Force | Select-Object FullName | ConvertTo-Csv -NoTypeInformation | Out-String)"
-    ]
-  }
-}
