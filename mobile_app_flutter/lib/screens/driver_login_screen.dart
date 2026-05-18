@@ -14,6 +14,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
   final _passwordCtrl = TextEditingController();
   final _authService = AuthService();
   bool _loading = false;
+  bool _googleLoading = false;
   bool _obscure = true;
 
   Future<void> _login() async {
@@ -34,6 +35,19 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
       _showMsg(e.toString().replaceFirst('Exception: ', ''), isError: true);
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    setState(() => _googleLoading = true);
+    try {
+      await _authService.signInDriverWithGoogle();
+      if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
+    } catch (e) {
+      final msg = e.toString().replaceFirst('Exception: ', '');
+      if (msg != 'Google sign-in cancelled.') _showMsg(msg, isError: true);
+    } finally {
+      if (mounted) setState(() => _googleLoading = false);
     }
   }
 
@@ -118,6 +132,35 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
                       ),
                       child: const Text('Login',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ),
+              const SizedBox(height: 16),
+              Row(children: const [
+                Expanded(child: Divider()),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text('or', style: TextStyle(color: Colors.grey)),
+                ),
+                Expanded(child: Divider()),
+              ]),
+              const SizedBox(height: 16),
+              _googleLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : OutlinedButton.icon(
+                      onPressed: _loginWithGoogle,
+                      icon: Image.network(
+                        'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg',
+                        width: 20,
+                        height: 20,
+                        errorBuilder: (_, __, ___) => const Icon(Icons.login, size: 20),
+                      ),
+                      label: const Text('Continue with Google',
+                          style: TextStyle(fontWeight: FontWeight.w600)),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: const BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
                     ),
               const SizedBox(height: 16),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [

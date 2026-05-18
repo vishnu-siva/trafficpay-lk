@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class OfficerProfile {
   final String uid;
@@ -127,6 +128,33 @@ class AuthService {
       throw Exception('This account is not registered as a driver.');
     }
     return DriverProfile.fromDoc(cred.user!.uid, doc.data()!);
+  }
+
+  Future<DriverProfile> signInDriverWithGoogle() async {
+    final googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) throw Exception('Google sign-in cancelled.');
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final cred = await _auth.signInWithCredential(credential);
+    final user = cred.user!;
+    final ref = _db.collection('drivers').doc(user.uid);
+    final snap = await ref.get();
+    if (!snap.exists) {
+      final data = {
+        'fullName': user.displayName ?? '',
+        'nicNumber': '',
+        'email': user.email ?? '',
+        'phoneNumber': user.phoneNumber,
+        'role': 'DRIVER',
+        'createdAt': FieldValue.serverTimestamp(),
+      };
+      await ref.set(data);
+      return DriverProfile.fromDoc(user.uid, data);
+    }
+    return DriverProfile.fromDoc(user.uid, snap.data()!);
   }
 
   Future<DriverProfile?> getCurrentDriverProfile() async {
