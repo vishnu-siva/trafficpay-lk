@@ -20,26 +20,33 @@ const paidTotal = row => Number(row.totalPaid ?? row.paid ?? 0)
 const revenueTotal = row => Number(row.totalRevenue ?? row.revenue ?? row.amount ?? 0)
 const rateTotal = row => Number(row.collectionRate ?? 0)
 
-function KpiCard({ title, value, sub, tone }) {
-  const tones = {
-    sky: 'bg-blue-50 text-blue-900 border-blue-100',
-    green: 'bg-emerald-50 text-emerald-800 border-emerald-100',
-    amber: 'bg-amber-50 text-amber-800 border-amber-100',
-    slate: 'bg-slate-50 text-slate-800 border-slate-100',
-  }
+const KPI_ACCENT = {
+  sky: 'bg-blue-600',
+  green: 'bg-emerald-500',
+  amber: 'bg-amber-500',
+  slate: 'bg-slate-400',
+}
+const KPI_CARD = {
+  sky: 'border-blue-100 bg-gradient-to-br from-blue-50 to-white text-blue-900',
+  green: 'border-emerald-100 bg-gradient-to-br from-emerald-50 to-white text-emerald-800',
+  amber: 'border-amber-100 bg-gradient-to-br from-amber-50 to-white text-amber-800',
+  slate: 'border-slate-200 bg-gradient-to-br from-slate-50 to-white text-slate-800',
+}
 
+function KpiCard({ title, value, sub, tone }) {
   return (
-    <div className={`rounded-lg border p-5 ${tones[tone]}`}>
-      <p className="text-sm font-semibold opacity-80">{title}</p>
+    <div className={`relative overflow-hidden rounded-xl border p-5 shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg ${KPI_CARD[tone]}`}>
+      <div className={`absolute left-0 right-0 top-0 h-1 ${KPI_ACCENT[tone]}`} />
+      <p className="text-sm font-semibold opacity-75">{title}</p>
       <p className="mt-2 text-3xl font-black text-slate-950">{value}</p>
-      {sub && <p className="mt-2 text-xs font-medium opacity-75">{sub}</p>}
+      {sub && <p className="mt-2 text-xs font-medium opacity-70">{sub}</p>}
     </div>
   )
 }
 
 function EmptyState({ title }) {
   return (
-    <div className="grid min-h-64 place-items-center rounded-lg border border-dashed border-slate-300 bg-slate-50 px-6 text-center text-sm font-medium text-slate-500">
+    <div className="grid min-h-64 place-items-center rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 text-center text-sm font-medium text-slate-500">
       {title}
     </div>
   )
@@ -107,32 +114,26 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <p className="text-sm font-semibold text-blue-900">Overview</p>
-          <h1 className="mt-1 text-3xl font-black text-slate-950">Dashboard</h1>
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-900">Overview</p>
+          <h1 className="mt-1.5 text-3xl font-black text-slate-950">Dashboard</h1>
         </div>
-        <div className="surface flex flex-wrap items-center gap-3 rounded-lg p-3">
-          <input type="date" value={from} onChange={e => setFrom(e.target.value)}
-            className="field w-auto" />
+        <div className="surface flex flex-wrap items-center gap-3 rounded-xl p-3">
+          <input type="date" value={from} onChange={e => setFrom(e.target.value)} className="field w-auto" />
           <span className="text-sm font-semibold text-slate-400">to</span>
-          <input type="date" value={to} onChange={e => setTo(e.target.value)}
-            className="field w-auto" />
-          <button onClick={fetchData}
-            className="btn-primary">
-            Apply
-          </button>
-          <button onClick={exportCsv} disabled={!districtData.length}
-            className="btn-secondary">
-            Export CSV
-          </button>
+          <input type="date" value={to} onChange={e => setTo(e.target.value)} className="field w-auto" />
+          <button onClick={fetchData} className="btn-primary">Apply</button>
+          <button onClick={exportCsv} disabled={!districtData.length} className="btn-secondary">Export CSV</button>
         </div>
       </div>
 
       {loading ? (
-        <div className="surface grid min-h-80 place-items-center rounded-lg text-sm font-semibold text-slate-500">Loading dashboard...</div>
+        <div className="surface grid min-h-80 place-items-center rounded-xl text-sm font-semibold text-slate-500">
+          Loading dashboard...
+        </div>
       ) : (
         <>
           {error && (
-            <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
+            <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
               {error}
             </div>
           )}
@@ -141,15 +142,19 @@ export default function DashboardPage() {
             <KpiCard title="Fines Issued" value={number(summary?.totalFinesIssued)} tone="slate" />
             <KpiCard title="Paid Fines" value={number(summary?.totalFinesPaid)} tone="green" />
             <KpiCard title="Revenue" value={money(summary?.totalRevenue)} tone="sky" />
-            <KpiCard title="Collection Rate" value={`${summary?.collectionRate ?? 0}%`}
-              sub={`${number(summary?.totalFinesPending)} pending`} tone="amber" />
+            <KpiCard
+              title="Collection Rate"
+              value={`${summary?.collectionRate ?? 0}%`}
+              sub={`${number(summary?.totalFinesPending)} pending`}
+              tone="amber"
+            />
           </div>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <div className="surface rounded-lg p-5">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-md">
               <div className="mb-4 flex items-center justify-between gap-4">
                 <h2 className="font-bold text-slate-900">Collections by District</h2>
-                <p className="text-xs font-semibold text-slate-500">Top 10</p>
+                <p className="text-xs font-semibold text-slate-400">Top 10</p>
               </div>
               {districtData.length ? (
                 <ResponsiveContainer width="100%" height={320}>
@@ -172,19 +177,28 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="surface rounded-lg p-5">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-md">
               <div className="mb-4 flex items-center justify-between gap-4">
                 <h2 className="font-bold text-slate-900">Breakdown by Category</h2>
-                <p className="text-xs font-semibold text-slate-500">{paidCategories.length} active</p>
+                <p className="text-xs font-semibold text-slate-400">{paidCategories.length} active</p>
               </div>
               {paidCategories.length > 0 ? (
                 <ResponsiveContainer width="100%" height={320}>
                   <PieChart>
-                    <Pie data={paidCategories.map(row => ({
-                      code: categoryName(row),
-                      totalPaid: paidTotal(row) || issuedTotal(row),
-                    }))} dataKey="totalPaid"
-                      nameKey="code" cx="50%" cy="50%" innerRadius={62} outerRadius={108} paddingAngle={3} label={({ code }) => code}>
+                    <Pie
+                      data={paidCategories.map(row => ({
+                        code: categoryName(row),
+                        totalPaid: paidTotal(row) || issuedTotal(row),
+                      }))}
+                      dataKey="totalPaid"
+                      nameKey="code"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={62}
+                      outerRadius={108}
+                      paddingAngle={3}
+                      label={({ code }) => code}
+                    >
                       {paidCategories.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                     </Pie>
                     <Tooltip formatter={(v) => [number(v), 'Paid']} />
@@ -197,40 +211,49 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="surface overflow-hidden rounded-lg">
-            <div className="border-b border-slate-200 px-5 py-4">
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-md">
+            <div className="border-b border-slate-200 bg-slate-50/70 px-5 py-4">
               <h2 className="font-bold text-slate-900">District Breakdown</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-slate-50">
-                  <tr>
+                  <tr className="border-b-2 border-slate-200">
                     {['District', 'Issued', 'Paid', 'Pending', 'Revenue (LKR)', 'Collection Rate'].map(h => (
-                      <th key={h} className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase text-slate-500">{h}</th>
+                      <th key={h} className="whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-500">
+                        {h}
+                      </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {districtData.map(d => (
-                    <tr key={districtName(d)} className="hover:bg-slate-50">
+                    <tr key={districtName(d)} className="transition-colors duration-100 hover:bg-blue-50/40">
                       <td className="whitespace-nowrap px-4 py-3 font-semibold text-slate-900">{districtName(d)}</td>
                       <td className="px-4 py-3 text-slate-700">{number(issuedTotal(d))}</td>
                       <td className="px-4 py-3 font-semibold text-emerald-700">{number(paidTotal(d))}</td>
-                      <td className="px-4 py-3 font-semibold text-amber-700">{number(Math.max(issuedTotal(d) - paidTotal(d), 0))}</td>
+                      <td className="px-4 py-3 font-semibold text-amber-700">
+                        {number(Math.max(issuedTotal(d) - paidTotal(d), 0))}
+                      </td>
                       <td className="whitespace-nowrap px-4 py-3 text-slate-700">{number(revenueTotal(d))}</td>
                       <td className="px-4 py-3">
                         <div className="flex min-w-36 items-center gap-2">
-                          <div className="h-2 flex-1 rounded-full bg-slate-200">
-                            <div className="h-2 rounded-full bg-blue-950" style={{ width: `${Math.min(rateTotal(d), 100)}%` }} />
+                          <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200">
+                            <div
+                              className="h-2 rounded-full bg-gradient-to-r from-blue-800 to-blue-950 transition-all duration-500"
+                              style={{ width: `${Math.min(rateTotal(d), 100)}%` }}
+                            />
                           </div>
-                          <span className="w-10 text-right text-xs font-semibold text-slate-600">{rateTotal(d)}%</span>
+                          <span className="w-10 text-right text-xs font-semibold text-slate-600">
+                            {rateTotal(d)}%
+                          </span>
                         </div>
                       </td>
                     </tr>
                   ))}
                   {districtData.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="px-4 py-10 text-center text-sm font-medium text-slate-500">No data</td>
+                      <td colSpan={6} className="px-4 py-12 text-center text-sm font-medium text-slate-500">No data</td>
                     </tr>
                   )}
                 </tbody>

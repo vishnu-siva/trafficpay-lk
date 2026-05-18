@@ -43,9 +43,7 @@ export default function PaymentPage() {
     }
   }, [profile])
 
-  if (!fine) {
-    return null
-  }
+  if (!fine) return null
 
   const referenceNumber = getReference(fine)
   const categoryId = getCategoryId(fine)
@@ -122,13 +120,13 @@ export default function PaymentPage() {
     <div>
       <StepIndicator current={2} />
 
-      <section className="surface mt-8 rounded-lg p-6">
+      <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-md">
         {demoNotice && (
-          <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+          <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
             {demoNotice}
           </div>
         )}
-        <h2 className="text-lg font-semibold text-slate-950">{t('fineSummary')}</h2>
+        <h2 className="text-base font-bold text-slate-950">{t('fineSummary')}</h2>
         <dl className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
           <SummaryItem label={t('reference')} value={referenceNumber} mono />
           <SummaryItem label={t('categoryId')} value={categoryId} mono />
@@ -139,12 +137,12 @@ export default function PaymentPage() {
         </dl>
       </section>
 
-      <section className="surface mt-4 rounded-lg p-6">
-        <h2 className="text-xl font-semibold text-slate-950">{t('step2')}</h2>
+      <section className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-md">
+        <h2 className="text-xl font-bold text-slate-950">{t('step2')}</h2>
 
         <form onSubmit={handlePayment} className="mt-5 space-y-5">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="payer-name">
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700" htmlFor="payer-name">
               {t('payerName')}
             </label>
             <input
@@ -158,7 +156,7 @@ export default function PaymentPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="payer-nic">
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700" htmlFor="payer-nic">
               {t('payerNic')}
             </label>
             <input
@@ -174,7 +172,7 @@ export default function PaymentPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="payment-method">
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700" htmlFor="payment-method">
               {t('paymentMethod')}
             </label>
             <select
@@ -184,32 +182,22 @@ export default function PaymentPage() {
               className="field"
             >
               {methods.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {item.label}
-                </option>
+                <option key={item.value} value={item.value}>{item.label}</option>
               ))}
             </select>
           </div>
 
           {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
               {t(error)}
             </div>
           )}
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => navigate('/')}
-              className="btn-secondary"
-            >
+            <button type="button" onClick={() => navigate('/')} className="btn-secondary">
               {t('back')}
             </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-success"
-            >
+            <button type="submit" disabled={loading} className="btn-success">
               {loading ? t('loading') : `${t('payBtn')} - ${formatMoney(amount)}`}
             </button>
           </div>
@@ -221,9 +209,9 @@ export default function PaymentPage() {
 
 function SummaryItem({ label, value, mono = false, strong = false }) {
   return (
-    <div className="rounded-md bg-slate-50 p-3">
-      <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</dt>
-      <dd className={`mt-1 break-words ${mono ? 'font-mono' : ''} ${strong ? 'text-lg font-bold text-red-700' : 'font-semibold text-slate-900'}`}>
+    <div className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-100">
+      <dt className="text-xs font-bold uppercase tracking-wide text-slate-500">{label}</dt>
+      <dd className={`mt-1 break-words ${mono ? 'font-mono' : ''} ${strong ? 'text-lg font-bold text-rose-700' : 'font-semibold text-slate-900'}`}>
         {value || '-'}
       </dd>
     </div>

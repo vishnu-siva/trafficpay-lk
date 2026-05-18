@@ -10,6 +10,7 @@ export default function RegisterPage() {
   useEffect(() => {
     if (!authLoading && isLoggedIn) navigate('/', { replace: true })
   }, [isLoggedIn, authLoading, navigate])
+
   const [form, setForm] = useState({
     fullName: '', nicNumber: '', phoneNumber: '', email: '', password: '', confirm: '',
   })
@@ -53,9 +54,12 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="surface rounded-lg p-6 sm:p-8">
-      <h2 className="mb-1 text-2xl font-bold text-slate-950">Register as a Driver</h2>
-      <p className="mb-6 text-sm text-slate-500">Your details will be saved for future payments</p>
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl ring-1 ring-slate-200/60 sm:p-8">
+      <div className="mb-6">
+        <p className="text-xs font-bold uppercase tracking-widest text-blue-900">Driver Portal</p>
+        <h2 className="mt-1.5 text-2xl font-black text-slate-950">Create Account</h2>
+        <p className="mt-1 text-sm text-slate-500">Your details will be saved for future payments</p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Field label="Full Name *" type="text" value={form.fullName} onChange={set('fullName')}
@@ -79,7 +83,7 @@ export default function RegisterPage() {
           autoComplete="new-password" />
 
         {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
             {error}
           </div>
         )}
@@ -89,9 +93,9 @@ export default function RegisterPage() {
         </button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
+      <p className="mt-5 text-center text-sm text-slate-500">
         Already have an account?{' '}
-        <Link to="/login" className="font-semibold text-blue-700 hover:underline">
+        <Link to="/login" className="font-semibold text-blue-800 hover:underline">
           Login
         </Link>
       </p>
@@ -102,7 +106,7 @@ export default function RegisterPage() {
 function Field({ label, ...props }) {
   return (
     <div>
-      <label className="mb-1 block text-sm font-medium text-slate-700">{label}</label>
+      <label className="mb-1.5 block text-sm font-semibold text-slate-700">{label}</label>
       <input className="field" {...props} />
     </div>
   )

@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { jsPDF } from 'jspdf'
@@ -21,14 +21,10 @@ export default function ConfirmationPage() {
   const demoNotice = state?.demoNotice
 
   useEffect(() => {
-    if (!receipt) {
-      navigate('/', { replace: true })
-    }
+    if (!receipt) navigate('/', { replace: true })
   }, [receipt, navigate])
 
-  if (!receipt) {
-    return null
-  }
+  if (!receipt) return null
 
   const receiptNo = getReceiptNumber(receipt)
   const paidAt = receipt.paidAt || receipt.createdAt || new Date().toISOString()
@@ -67,19 +63,20 @@ export default function ConfirmationPage() {
     <div>
       <StepIndicator current={3} />
 
-      <section className="surface mt-8 rounded-lg p-6 text-center sm:p-8">
+      <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-md sm:p-8">
         {demoNotice && (
-          <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm font-medium text-amber-800">
+          <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm font-medium text-amber-800">
             {demoNotice}
           </div>
         )}
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-100 text-3xl text-emerald-700">
+
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-100 text-3xl text-emerald-700 shadow-md ring-4 ring-emerald-50">
           ✓
         </div>
-        <h2 className="mt-4 text-2xl font-bold text-emerald-700">{t('success')}</h2>
+        <h2 className="mt-4 text-2xl font-black text-emerald-700">{t('success')}</h2>
         <p className="mx-auto mt-2 max-w-lg text-sm text-slate-500">{t('successMessage')}</p>
 
-        <dl className="mt-6 divide-y divide-slate-200 rounded-lg border border-slate-200 bg-slate-50 text-left text-sm">
+        <dl className="mt-6 overflow-hidden divide-y divide-slate-200 rounded-xl border border-slate-200 bg-slate-50 text-left text-sm shadow-sm">
           <ReceiptRow label={t('receiptNo')} value={receiptNo} mono />
           <ReceiptRow label={t('reference')} value={reference} mono />
           <ReceiptRow label={t('amountPaid')} value={formatMoney(amount)} highlight />
@@ -88,18 +85,10 @@ export default function ConfirmationPage() {
         </dl>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={downloadReceipt}
-            className="btn-primary"
-          >
+          <button type="button" onClick={downloadReceipt} className="btn-primary">
             {t('downloadReceipt')}
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="btn-secondary"
-          >
+          <button type="button" onClick={() => navigate('/')} className="btn-secondary">
             {t('payAnother')}
           </button>
         </div>
@@ -111,11 +100,10 @@ export default function ConfirmationPage() {
 function ReceiptRow({ label, value, mono = false, highlight = false }) {
   return (
     <div className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-      <dt className="font-medium text-slate-500">{label}</dt>
-      <dd className={`break-words text-slate-900 ${mono ? 'font-mono' : ''} ${highlight ? 'font-bold text-emerald-700' : 'font-semibold'}`}>
+      <dt className="font-semibold text-slate-500">{label}</dt>
+      <dd className={`break-words text-slate-900 ${mono ? 'font-mono text-sm' : ''} ${highlight ? 'font-bold text-emerald-700' : 'font-semibold'}`}>
         {value || '-'}
       </dd>
     </div>
   )
 }
-

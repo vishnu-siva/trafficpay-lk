@@ -34,24 +34,16 @@ export default function HomePage() {
     async function loadCategories() {
       try {
         const { data } = await getCategories()
-        if (active) {
-          setCategories(normalizeCategories(data))
-        }
+        if (active) setCategories(normalizeCategories(data))
       } catch {
-        if (active) {
-          setCategories([])
-        }
+        if (active) setCategories([])
       } finally {
-        if (active) {
-          setCategoryLoading(false)
-        }
+        if (active) setCategoryLoading(false)
       }
     }
 
     loadCategories()
-    return () => {
-      active = false
-    }
+    return () => { active = false }
   }, [])
 
   async function handleLookup(event) {
@@ -96,15 +88,15 @@ export default function HomePage() {
     <div>
       <StepIndicator current={1} />
 
-      <section className="surface mt-8 rounded-lg p-6">
+      <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-md">
         <div className="mb-6">
-          <h2 className="text-xl font-semibold text-slate-950">{t('step1')}</h2>
+          <h2 className="text-xl font-bold text-slate-950">{t('step1')}</h2>
           <p className="mt-1 text-sm text-slate-500">{t('lookupHelp')}</p>
         </div>
 
         <form onSubmit={handleLookup} className="space-y-5">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="reference-number">
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700" htmlFor="reference-number">
               {t('refNumber')}
             </label>
             <input
@@ -119,7 +111,7 @@ export default function HomePage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700" htmlFor="category-id">
+            <label className="mb-1.5 block text-sm font-semibold text-slate-700" htmlFor="category-id">
               {t('categoryId')}
             </label>
             {categories.length > 0 ? (
@@ -151,16 +143,12 @@ export default function HomePage() {
           </div>
 
           {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
               {t(error)}
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary w-full"
-          >
+          <button type="submit" disabled={loading} className="btn-primary w-full">
             {loading ? t('loading') : t('lookupBtn')}
           </button>
         </form>
