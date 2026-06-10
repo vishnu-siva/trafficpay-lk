@@ -11,6 +11,8 @@ admin-portal/dist/
 driver-portal/dist/
 backend/target/
 
+.claude/
+
 # Environment & cache
 .env
 admin-portal/.env
