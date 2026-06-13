@@ -244,10 +244,10 @@ Open `mobile-app/` in Android Studio and run on an emulator or device.
 
 | Name |
 |---|---|
-| Vishnuha Sivanandarajah 
-| Srivaxshana Murugavel 
-| Suwaathmi Ravindran 
-| Thurga Rajinathan 
+| Vishnuha Sivanandarajah |
+| Srivaxshana Murugavel | 
+| Suwaathmi Ravindran | 
+| Thurga Rajinathan |
 
 **Module:** Software Architecture  
 
