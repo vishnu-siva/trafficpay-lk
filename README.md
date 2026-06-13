@@ -25,7 +25,7 @@ TrafficPay LK aligns with Sri Lanka's national digitalization policy by eliminat
 1. A traffic officer stops a driver and issues a fine sheet with a **unique reference number** and **fine category ID**
 2. The driver pays immediately via the **Android mobile app**
 3. If not paid on-the-spot, the driver pays later via the **driver web portal**
-4. On successful payment, an **SMS is sent to the officer** — the driver retrieves their licence
+4. On successful payment, an **SMS is sent to the officer** - the driver retrieves their licence
 
 Senior officials monitor all collections nationwide via the **admin web portal**.
 
@@ -69,8 +69,8 @@ Senior officials monitor all collections nationwide via the **admin web portal**
                ┌────────────────┼─────────────────┐
                │                │                  │
     ┌──────────▼──────┐  ┌──────▼──────┐  ┌───────▼──────┐
-    │    Firebase     │  │   Twilio    │  │  Fine/Payment │
-    │   Firestore     │  │  SMS API    │  │   Analytics   │
+    │    Firebase     │  │   Twilio    │  │  Fine/Payment│
+    │   Firestore     │  │  SMS API    │  │   Analytics  │
     └─────────────────┘  └─────────────┘  └──────────────┘
 ```
 
