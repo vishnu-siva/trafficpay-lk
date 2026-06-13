@@ -53,8 +53,8 @@ Senior officials monitor all collections nationwide via the **admin web portal**
 │   Android App   │    │  Driver Portal  │    │  Admin Portal   │
 │   (Kotlin)      │    │  (React + Vite) │    │  (React + Vite) │
 └────────┬────────┘    └────────┬────────┘    └────────┬────────┘
-         │                      │                       │
-         └──────────────────────┼───────────────────────┘
+         │                      │                      │
+         └──────────────────────┼──────────────────────┘
                                 │  REST API (JWT Auth)
                     ┌───────────▼───────────┐
                     │   Spring Boot 3.2     │
