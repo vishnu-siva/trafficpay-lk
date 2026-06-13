@@ -83,7 +83,7 @@ Senior officials monitor all collections nationwide via the **admin web portal**
 |---|---|---|
 | Java | 17 | Core language |
 | Spring Boot | 3.2.0 | REST API framework |
-| Spring Security | — | Authentication & authorization |
+| Spring Security | - | Authentication & authorization |
 | JJWT | 0.12.3 | JWT token generation & validation |
 | Firebase Admin SDK | 9.2.0 | Firestore database access |
 | Twilio SDK | 9.14.0 | SMS notifications |
@@ -242,12 +242,12 @@ Open `mobile-app/` in Android Studio and run on an emulator or device.
 
 ## Team
 
-| Name | Registration Number |
+| Name |
 |---|---|
-| Sivanandarajah V. | EG/2022/5351 |
-| Srivaxshana M. | EG/2022/5355 |
-| Suwaathmi R. | EG/2022/5361 |
-| Thurga R. | EG/2022/5374 |
+| Vishnuha Sivanandarajah 
+| Srivaxshana Murugavel 
+| Suwaathmi Ravindran 
+| Thurga Rajinathan 
 
 **Module:** Software Architecture  
-**Total Marks:** 30
+
