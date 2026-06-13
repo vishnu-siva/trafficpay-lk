@@ -243,7 +243,7 @@ Open `mobile-app/` in Android Studio and run on an emulator or device.
 ## Team
 
 | Name |
-|---|---|
+|---|
 | Vishnuha Sivanandarajah |
 | Srivaxshana Murugavel | 
 | Suwaathmi Ravindran | 
